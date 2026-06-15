@@ -1,0 +1,29 @@
+:root .rgh-reviewer-avatar {
+	--size: 20px;
+
+	width: var(--size);
+	height: var(--size);
+	border-radius: 50%;
+	margin-right: calc(var(--size) * -0.25);
+	vertical-align: middle;
+	outline: 2px solid transparent;
+	outline-offset: 1px;
+
+	&:last-of-type {
+		margin-right: 0;
+	}
+
+	&.rgh-reviewer-avatar--approved {
+		outline-color: var(--borderColor-success-emphasis, var(--color-success-emphasis, #2da44e));
+	}
+
+	&.rgh-reviewer-avatar--needs-work {
+		outline-color: #e040fb;
+	}
+}
+
+:root .rgh-reviewer-avatars {
+	display: inline-flex;
+	align-items: center;
+	vertical-align: middle;
+}
