@@ -1,9 +1,9 @@
 {
 	"$schema": "https://json.schemastore.org/chrome-manifest",
-	"name": "Refined GitHub",
-	"version": "0.0.0",
+	"name": "Briostack Refined GitHub (fork)",
+	"version": "1.0.1",
 	"description": "Simplifies the GitHub interface and adds useful features",
-	"homepage_url": "https://github.com/refined-github/refined-github",
+	"homepage_url": "https://github.com/briostack/refined-github",
 	"manifest_version": 3,
 	"minimum_chrome_version": "123",
 	"browser_specific_settings": {
@@ -17,9 +17,6 @@
 	},
 	"permissions": [
 		"storage",
-		"scripting",
-		"contextMenus",
-		"activeTab",
 		"alarms"
 	],
 	"host_permissions": [
@@ -29,9 +26,6 @@
 	"action": {
 		"default_icon": "assets/icon.png"
 	},
-	"optional_host_permissions": [
-		"*://*/*"
-	],
 	"icons": {
 		"128": "assets/icon.png"
 	},
