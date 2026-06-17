@@ -41,16 +41,15 @@ function buildQuery(prsByRepo: Map<string, Pr[]>): string {
 								}
 							}
 						}
-						latestOpinionatedReviews(first: 10) {
+						reviews(last: 20) {
 							nodes {
 								state
 								author { login avatarUrl }
 							}
 						}
-						latestReviews(first: 10) {
+						reviewThreads(first: 100) {
 							nodes {
-								state
-								author { login avatarUrl }
+								isResolved
 							}
 						}
 					}
@@ -59,6 +58,26 @@ function buildQuery(prsByRepo: Map<string, Pr[]>): string {
 			}
 		`;
 	}).join('\n');
+}
+
+function renderUnresolvedComments(pr: Pr, count: number): void {
+	if (count === 0) {
+		return;
+	}
+
+	const badge = (
+		<span className="rgh-unresolved-comments ml-2 tmp-ml-2">
+			{count} unresolved
+		</span>
+	);
+
+	const metadataRow = pr.link.matches('.js-issue-row *')
+		? pr.link.closest('.js-issue-row')!.querySelector('.text-small.color-fg-muted .d-none.d-md-inline-flex')
+		: closestElement('li', pr.link)?.querySelector(
+			'div[data-testid="list-row-repo-name-and-number"], div[class^="Description"]',
+		);
+
+	metadataRow?.append(badge);
 }
 
 function renderReviewers(pr: Pr, reviewers: Reviewer[]): void {
@@ -142,20 +161,17 @@ async function add(prLinks: HTMLAnchorElement[]): Promise<void> {
 				}
 			}
 
-			// COMMENTED is the weakest signal — only set if not already in map
-			for (const node of prData.latestReviews.nodes) {
-				if (node.author && !isFiltered(node.author.login) && !byLogin.has(node.author.login)) {
-					byLogin.set(node.author.login, {
-						login: node.author.login,
-						avatarUrl: node.author.avatarUrl,
-						state: 'COMMENTED',
-					});
+			// Later reviews override earlier ones; APPROVED/CHANGES_REQUESTED beat COMMENTED
+			const statePriority: Record<string, number> = {COMMENTED: 1, CHANGES_REQUESTED: 2, APPROVED: 3};
+			for (const node of prData.reviews.nodes) {
+				if (!node.author || isFiltered(node.author.login)) {
+					continue;
 				}
-			}
 
-			// Opinionated reviews (APPROVED / CHANGES_REQUESTED) always win
-			for (const node of prData.latestOpinionatedReviews.nodes) {
-				if (node.author && !isFiltered(node.author.login)) {
+				const existing = byLogin.get(node.author.login);
+				const incomingPriority = statePriority[node.state] ?? 0;
+				const existingPriority = existing ? (statePriority[existing.state] ?? 0) : 0;
+				if (incomingPriority >= existingPriority) {
 					byLogin.set(node.author.login, {
 						login: node.author.login,
 						avatarUrl: node.author.avatarUrl,
@@ -165,6 +181,11 @@ async function add(prLinks: HTMLAnchorElement[]): Promise<void> {
 			}
 
 			renderReviewers(pr, [...byLogin.values()]);
+
+			const unresolvedCount = prData.reviewThreads.nodes.filter(
+				(node: {isResolved: boolean}) => !node.isResolved,
+			).length;
+			renderUnresolvedComments(pr, unresolvedCount);
 		}
 	}
 }

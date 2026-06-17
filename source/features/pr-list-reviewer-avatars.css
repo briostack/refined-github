@@ -27,3 +27,8 @@
 	align-items: center;
 	vertical-align: middle;
 }
+
+:root .rgh-unresolved-comments {
+	font-size: 12px;
+	color: var(--fgColor-muted, var(--color-fg-muted, #656d76));
+}
