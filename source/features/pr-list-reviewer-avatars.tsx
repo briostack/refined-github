@@ -33,6 +33,7 @@ function buildQuery(prsByRepo: Map<string, Pr[]>): string {
 				${
 					prs.map(pr => `
 					${api.escapeKey('pr', pr.number)}: pullRequest(number: ${pr.number}) {
+						author { login }
 						reviewRequests(first: 10) {
 							nodes {
 								requestedReviewer {
@@ -151,7 +152,9 @@ async function add(prLinks: HTMLAnchorElement[]): Promise<void> {
 			// Build login → reviewer map; later entries override earlier ones (state priority)
 			const byLogin = new Map<string, Reviewer>();
 
-			const isFiltered = (login: string): boolean => login === 'copilot-pull-request-reviewer';
+			const isFiltered = (login: string): boolean =>
+				login === 'copilot-pull-request-reviewer'
+				|| login === prData.author?.login;
 
 			// Pending requests have no review state yet
 			for (const node of prData.reviewRequests.nodes) {
