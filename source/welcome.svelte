@@ -18,7 +18,7 @@
 		} else if (stepValid === 3) {
 			setTimeout(() => {
 				location.replace(
-					'https://github.com/refined-github/refined-github/wiki',
+					'https://github.com/briostack/refined-github',
 				);
 			}, 2000);
 		}
@@ -112,7 +112,7 @@
 				</a>
 				to ensure that every feature works correctly.
 				<a
-					href="https://github.com/refined-github/refined-github/wiki/Security"
+					href="https://github.com/briostack/refined-github"
 				>
 					More info
 				</a>
@@ -144,7 +144,7 @@
 			Setup complete, redirecting to
 			<a
 				class="hidden-link"
-				href="https://github.com/refined-github/refined-github/wiki"
+				href="https://github.com/briostack/refined-github"
 				target="_self"
 			>GitHub</a>…
 		</h2>

@@ -7,7 +7,7 @@
 		"build": "run-p build:typescript --continue-on-error && run-s build:bundle build:zip",
 		"build:typescript": "tsc --noEmit",
 		"build:bundle": "rollup -c",
-		"build:zip": "node -e \"const p=JSON.parse(require('fs').readFileSync('package.json','utf8'));const m=JSON.parse(require('fs').readFileSync('source/manifest.json','utf8'));const name=p.name+'-'+m.version+'.zip';require('child_process').execSync('zip -r '+name+' distribution/');console.log('Created '+name);\"",
+		"build:zip": "node -e \"const p=JSON.parse(require('fs').readFileSync('package.json','utf8'));const m=JSON.parse(require('fs').readFileSync('source/manifest.json','utf8'));const base=p.name+'-'+m.version;require('child_process').execSync('cd distribution && zip -r ../'+base+'.zip .');require('fs').copyFileSync(base+'.zip',base+'.xpi');console.log('Created '+base+'.zip and '+base+'.xpi');\"",
 		"fix": "run-p format \"lint:biome -- --write\" \"lint:eslint -- --fix\" \"vitest -- --update\" --continue-on-error",
 		"format": "dprint fmt",
 		"format:check": "dprint check",

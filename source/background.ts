@@ -11,6 +11,9 @@ import optionsStorage, {hasToken} from './options-storage.js';
 
 const {version} = chrome.runtime.getManifest();
 
+// Required for Firefox: allow content scripts to access session storage
+void chrome.storage.session.setAccessLevel?.({accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS'});
+
 const welcomeShown = new StorageItem('welcomed', {defaultValue: false});
 
 handleMessages({

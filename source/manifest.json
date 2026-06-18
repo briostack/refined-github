@@ -1,7 +1,7 @@
 {
 	"$schema": "https://json.schemastore.org/chrome-manifest",
 	"name": "Briostack Refined GitHub (fork)",
-	"version": "1.0.4",
+	"version": "1.0.5",
 	"description": "Simplifies the GitHub interface and adds useful features",
 	"homepage_url": "https://github.com/briostack/refined-github",
 	"manifest_version": 3,
@@ -32,7 +32,10 @@
 	"options_page": "assets/options.html",
 	"background": {
 		"service_worker": "assets/background.js",
-		"type": "module"
+		"type": "module",
+		"scripts": [
+			"assets/background.js"
+		]
 	},
 	"content_scripts": [
 		{
