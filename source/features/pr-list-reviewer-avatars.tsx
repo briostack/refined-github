@@ -159,7 +159,7 @@ async function add(prLinks: HTMLAnchorElement[]): Promise<void> {
 			// Pending requests have no review state yet
 			for (const node of prData.reviewRequests.nodes) {
 				const r = node.requestedReviewer;
-				if (r && !isFiltered(r.login)) {
+				if (r?.login && !isFiltered(r.login)) {
 					byLogin.set(r.login, {login: r.login, avatarUrl: r.avatarUrl, state: 'PENDING'});
 				}
 			}
@@ -167,7 +167,7 @@ async function add(prLinks: HTMLAnchorElement[]): Promise<void> {
 			// Later reviews override earlier ones; APPROVED/CHANGES_REQUESTED beat COMMENTED
 			const statePriority: Record<string, number> = {COMMENTED: 1, CHANGES_REQUESTED: 2, APPROVED: 3};
 			for (const node of prData.reviews.nodes) {
-				if (!node.author || isFiltered(node.author.login)) {
+				if (!node.author?.login || isFiltered(node.author.login)) {
 					continue;
 				}
 
